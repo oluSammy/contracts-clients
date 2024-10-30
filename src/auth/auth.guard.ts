@@ -12,12 +12,16 @@ import { Request } from 'express';
 export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
+  // console.log(jwtConstants.secret, '...');
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
     }
+
+    console.log(token, '...');
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,

@@ -1,19 +1,20 @@
 import { Module } from '@nestjs/common';
-import { ProfilesController } from './profiles.controllers';
-import { ProfilesService } from './profiles.service';
+
 import { PrismaService } from 'src/prisma.service';
-import { AuthGuard } from 'src/auth/auth.guard';
 import { JwtService } from '@nestjs/jwt';
+import { ContractsController } from './contracts.controller';
+import { ContractService } from './contracts.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/roles/role.guard';
 
 @Module({
-  controllers: [ProfilesController],
+  controllers: [ContractsController],
   providers: [
-    ProfilesService,
+    ContractService,
     PrismaService,
     JwtService,
     AuthGuard,
     RolesGuard,
   ],
 })
-export class ProfilesModule {}
+export class ContractsModule {}

@@ -20,11 +20,38 @@ model User {
   password String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  balance   Int      @default(0)
   userType UserType
+  contractsAsContractor Contract[] @relation("contractor")
+  contractsAsClient Contract[] @relation("client")
 }
 
 enum UserType {
   CLIENT
   ADMIN
   CONTRACTOR
+}
+
+model Contract {
+  id Int @default(autoincrement()) @id
+  clientId Int
+  contractorId Int
+  contractor User @relation(fields: [contractorId], references: [id], name: "contractor")
+  client User @relation(fields: [clientId], references: [id],  name: "client")
+  status ContractStatus
+  job Job[]
+}
+
+enum ContractStatus {
+  NEW
+  IN_PROGRESS
+  TERMINATED
+}
+
+
+model Job {
+  id Int @default(autoincrement()) @id
+  amountPaid Int @default(0)
+  contractId Int
+  contract Contract @relation(fields: [contractId], references: [id])
 }

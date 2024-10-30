@@ -15,13 +15,19 @@ export class AuthService {
   async signIn(email: string, pass: string): Promise<SignInResponse> {
     const user = await this.usersService.findByEmail(email);
 
+    console.log({ user });
+
     const isMatch = await bcrypt.compare(pass, user?.password);
 
     if (!isMatch) {
       throw new UnauthorizedException();
     }
 
-    const payload = { sub: user.id, username: user.email };
+    const payload = {
+      sub: user.id,
+      username: user.email,
+      userType: user.userType,
+    };
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: jwtConstants.secret,
     });
